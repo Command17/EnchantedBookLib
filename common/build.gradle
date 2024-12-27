@@ -1,3 +1,7 @@
+plugins {
+    id 'maven-publish'
+}
+
 architectury {
     common rootProject.enabled_platforms.split(',')
 }
