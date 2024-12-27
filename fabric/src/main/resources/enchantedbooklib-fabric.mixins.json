@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "package": "com.github.command17.enchantedbooklib.mixin.fabric",
+  "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8",
+  "client": [
+    "client.ClientPacketListenerMixin",
+    "client.KeyboardHandlerMixin",
+    "client.MinecraftMixin",
+    "client.MouseHandlerMixin"
+  ],
+  "mixins": [
+    "BlockItemMixin",
+    "CommandsMixin",
+    "ItemEntityMixin",
+    "LivingEntityMixin",
+    "PlayerListMixin",
+    "PlayerMixin",
+    "ServerPlayerGameModeMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

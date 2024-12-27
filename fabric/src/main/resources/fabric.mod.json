@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "enchantedbooklib",
+  "version": "${version}",
+  "name": "EnchantedBookLib",
+  "description": "",
+  "authors": ["Command17"],
+  "contact": {
+    "homepage": ""
+  },
+  "license": "MIT",
+  "icon": "assets/enchantedbooklib/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.github.command17.enchantedbooklib.fabric.EnchantedBookLibFabric"
+    ],
+    "client": [
+      "com.github.command17.enchantedbooklib.fabric.client.EnchantedBookLibFabricClient"
+    ]
+  },
+  "mixins": [
+    "enchantedbooklib.mixins.json",
+    "enchantedbooklib-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.9",
+    "minecraft": ">=1.21 <=1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "another-mod": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "badges": ["library"]
+    }
+  }
+}

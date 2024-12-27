@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "enchantedbooklib"
+version = "${version}"
+displayName = "EnchantedBookLib"
+authors = "Command17"
+description = '''
+
+'''
+#logoFile = ""
+
+[[dependencies.enchantedbooklib]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.enchantedbooklib]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21,1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+
+[[mixins]]
+config = "enchantedbooklib.mixins.json"
+
+[[mixins]]
+config = "enchantedbooklib-neoforge.mixins.json"

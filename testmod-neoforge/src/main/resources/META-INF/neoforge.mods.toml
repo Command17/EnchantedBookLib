@@ -1,0 +1,14 @@
+modLoader = "javafml"
+loaderVersion = "[2,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "testmod"
+version = "1.0.0"
+displayName = "Test Mod"
+authors = "Command17"
+description = '''
+
+'''
+#logoFile = ""
