@@ -1,11 +1,12 @@
 package com.github.command17.enchantedbooklib.api.events.command;
 
 import com.github.command17.enchantedbooklib.api.event.Event;
+import com.github.command17.enchantedbooklib.api.event.ICancelableEvent;
 import com.mojang.brigadier.ParseResults;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 
-public class PerformCommandEvent extends Event {
+public class PerformCommandEvent extends Event implements ICancelableEvent {
     private ParseResults<CommandSourceStack> results;
 
     @Nullable
