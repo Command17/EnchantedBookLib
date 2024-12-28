@@ -3,6 +3,7 @@ package com.github.command17.testmod.event;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.event.annotation.EventListener;
 import com.github.command17.enchantedbooklib.api.events.ServerLifecycleEvent;
+import com.github.command17.enchantedbooklib.api.events.entity.LivingEntityEvent;
 import com.github.command17.enchantedbooklib.api.events.level.BlockEvent;
 import com.github.command17.testmod.TestMod;
 import net.minecraft.world.entity.Entity;
@@ -29,6 +30,11 @@ public final class ModEvents {
             TestMod.LOGGER.info("{} placed a block!", placer.getName().getString());
             event.cancel();
         }
+    }
+
+    @EventListener
+    private static void onEntityHurt(LivingEntityEvent.Damage event) {
+        TestMod.LOGGER.info("{} got hurt!", event.getEntity().getName().getString());
     }
 
     public static class InnerEvents {
