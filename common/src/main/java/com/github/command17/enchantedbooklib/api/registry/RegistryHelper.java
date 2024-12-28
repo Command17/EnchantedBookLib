@@ -21,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Function;
@@ -156,8 +155,6 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
     }
 
     public static class ItemHelper extends RegistryHelper<Item> {
-        private final Multimap<ResourceKey<CreativeModeTab>, ResourceLocation> tabToItemsMap = ArrayListMultimap.create();
-
         @Nullable
         private final ResourceKey<CreativeModeTab> tab;
 
@@ -184,10 +181,6 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
 
         @Override
         public IRegistrySupplier<Item> register(ResourceLocation id, Supplier<Item> entry) {
-            if (this.tab != null) {
-                this.tabToItemsMap.get(this.tab).add(id);
-            }
-
             return super.register(id, entry);
         }
 
@@ -195,9 +188,9 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
         public void register() {
             super.register();
 
-            for (var tab: tabToItemsMap.keys()) {
-                CreativeModeTabRegistry.modifyTabContent(tab,
-                        (output) -> tabToItemsMap.get(tab).forEach((id) -> output.accept(this.getEntry(id).get())));
+            if (this.tab != null) {
+                CreativeModeTabRegistry.modifyTabContent(this.tab,
+                        (output) -> this.getEntries().forEach((entry) -> output.accept(entry.get())));
             }
         }
     }
