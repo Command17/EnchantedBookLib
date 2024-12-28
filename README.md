@@ -23,6 +23,6 @@ The main features of this library:
 
 ## Other 📚
 
-For more info and for the documentation go to the [wiki]().
+For more info and for the documentation go to the [wiki](https://github.com/Command17/EnchantedBookLib/wiki).
 
 Found an issue or do you have feedback? Make an issue on the [issue tracker](https://github.com/Command17/EnchantedBookLib/issues)!
