@@ -1,6 +1,6 @@
 modLoader = "javafml"
 loaderVersion = "[2,)"
-#issueTrackerURL = ""
+issueTrackerURL = "https://github.com/Command17/EnchantedBookLib/issues"
 license = "MIT"
 
 [[mods]]
@@ -9,9 +9,9 @@ version = "${version}"
 displayName = "EnchantedBookLib"
 authors = "Command17"
 description = '''
-
+A library mod for making multiplatform modding just a bit easier.
 '''
-#logoFile = ""
+logoFile = "assets/enchantedbooklib/icon.png"
 
 [[dependencies.enchantedbooklib]]
 modId = "neoforge"
