@@ -22,7 +22,7 @@ public class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"), cancellable = true)
     private void enchantedbooklib$onHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntityEvent.Damage livingEntityDamageEvent = new LivingEntityEvent.Damage((LivingEntity) ((Object) this), source, amount);
         EventManager.invoke(livingEntityDamageEvent);
