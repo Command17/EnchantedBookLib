@@ -7,7 +7,6 @@ import com.github.command17.enchantedbooklib.api.event.annotation.EventListener;
 import com.github.command17.testmod.TestMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.lwjgl.glfw.GLFW;
 
 @Environment(EnvType.CLIENT)
 public final class ModClientEvents {
@@ -15,9 +14,11 @@ public final class ModClientEvents {
 
     @EventListener
     private static void onRawKeyPress(RawKeyPressEvent event) {
+        /* I don't want console spam, but it works, trust
         if (event.getAction() == GLFW.GLFW_PRESS) {
             TestMod.LOGGER.info("Pressed key '{}'", event.getKeyCode());
         }
+        */
     }
 
     @EventListener
