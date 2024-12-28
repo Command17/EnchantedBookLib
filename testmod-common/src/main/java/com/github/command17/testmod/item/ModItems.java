@@ -13,6 +13,8 @@ public class ModItems {
     public static final IRegistrySupplier<Item> MAGIC_STICK = REGISTRY.registerItem("magic_stick",
             MagicStickItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
+    public static final IRegistrySupplier<Item> FUEL_STICK = REGISTRY.registerSimpleItem("fuel_stick");
+
     public static void register() {
         REGISTRY.register();
     }

@@ -32,6 +32,7 @@ public final class TestMod {
     @EventListener
     private static void registerFuelItems(RegisterFuelEvent event) {
         event.register(1000, ModItems.MAGIC_STICK.get());
+        event.register(2000, ModItems.FUEL_STICK.get());
     }
 
     public static ResourceLocation resource(String path) {
