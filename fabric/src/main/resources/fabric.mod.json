@@ -3,10 +3,11 @@
   "id": "enchantedbooklib",
   "version": "${version}",
   "name": "EnchantedBookLib",
-  "description": "",
+  "description": "A library mod for making multiplatform modding just a bit easier.",
   "authors": ["Command17"],
   "contact": {
-    "homepage": ""
+    "homepage": "https://github.com/Command17/EnchantedBookLib",
+    "issues": "https://github.com/Command17/EnchantedBookLib/issues"
   },
   "license": "MIT",
   "icon": "assets/enchantedbooklib/icon.png",
