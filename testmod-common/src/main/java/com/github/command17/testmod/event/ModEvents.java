@@ -3,9 +3,12 @@ package com.github.command17.testmod.event;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.event.annotation.EventListener;
 import com.github.command17.enchantedbooklib.api.events.ServerLifecycleEvent;
+import com.github.command17.enchantedbooklib.api.events.command.RegisterCommandEvent;
 import com.github.command17.enchantedbooklib.api.events.entity.LivingEntityEvent;
 import com.github.command17.enchantedbooklib.api.events.level.BlockEvent;
 import com.github.command17.testmod.TestMod;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 
@@ -35,6 +38,15 @@ public final class ModEvents {
     @EventListener
     private static void onEntityHurt(LivingEntityEvent.Damage event) {
         TestMod.LOGGER.info("{} got hurt!", event.getEntity().getName().getString());
+    }
+
+    @EventListener
+    private static void onRegisterCommands(RegisterCommandEvent event) {
+        event.getDispatcher().register(Commands.literal("testsay").executes((context) -> {
+            context.getSource().sendSystemMessage(Component.literal("You used '/testsay'! I will now say test: \"test\""));
+
+            return 1;
+        }));
     }
 
     public static class InnerEvents {
