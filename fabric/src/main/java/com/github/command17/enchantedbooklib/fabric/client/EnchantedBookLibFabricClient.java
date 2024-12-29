@@ -6,16 +6,26 @@ import com.github.command17.enchantedbooklib.api.client.events.fabric.ClientLife
 import com.github.command17.enchantedbooklib.api.client.events.fabric.ClientTickEventImpl;
 import com.github.command17.enchantedbooklib.api.client.events.fabric.ModifyItemTooltipEventImpl;
 import com.github.command17.enchantedbooklib.api.client.events.level.fabric.ClientLevelTickEventImpl;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterColorProviderEvent;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterParticleProviderEvent;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterRendererEvent;
+import com.github.command17.enchantedbooklib.api.client.events.registry.*;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.client.EnchantedBookLibClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 @Environment(EnvType.CLIENT)
 public final class EnchantedBookLibFabricClient implements ClientModInitializer {
@@ -38,11 +48,16 @@ public final class EnchantedBookLibFabricClient implements ClientModInitializer 
         EventManager.invoke(new ClientSetupEvent(Minecraft.getInstance()));
     }
 
+    @SuppressWarnings("unchecked")
     private static void invokePostRegisterEvents() {
-        EventManager.invoke(new RegisterParticleProviderEvent());
-        EventManager.invoke(new RegisterRendererEvent.Layer());
-        EventManager.invoke(new RegisterRendererEvent.Renderer());
-        EventManager.invoke(new RegisterColorProviderEvent.BlockProvider());
-        EventManager.invoke(new RegisterColorProviderEvent.ItemProvider());
+        EventManager.invoke(new RegisterParticleProviderEvent(
+                (particleType, provider) -> ParticleFactoryRegistry.getInstance().register((ParticleType<ParticleOptions>) particleType, (ParticleFactoryRegistry.PendingParticleFactory<ParticleOptions>) provider)));
+        EventManager.invoke(new RegisterEntityLayerEvent(
+                (id, layer) -> EntityModelLayerRegistry.registerModelLayer(id, layer::get)));
+        EventManager.invoke(new RegisterRendererEvent(
+                (entityType, renderer) -> EntityRendererRegistry.register(entityType, (EntityRendererProvider<Entity>) renderer),
+                (blockEntityType, renderer) -> BlockEntityRenderers.register(blockEntityType, (BlockEntityRendererProvider<BlockEntity>) renderer)));
+        EventManager.invoke(new RegisterBlockColorProviderEvent(ColorProviderRegistry.BLOCK::register));
+        EventManager.invoke(new RegisterItemColorProviderEvent(ColorProviderRegistry.ITEM::register));
     }
 }

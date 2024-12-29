@@ -12,11 +12,11 @@ import com.github.command17.enchantedbooklib.api.events.fabric.ModifyLootTableEv
 import com.github.command17.enchantedbooklib.api.events.fabric.ServerLifecycleEventImpl;
 import com.github.command17.enchantedbooklib.api.events.fabric.ServerTickEventImpl;
 import com.github.command17.enchantedbooklib.api.events.level.fabric.ServerLevelTickEventImpl;
-import com.github.command17.enchantedbooklib.api.events.registry.RegisterEntityAttributesEvent;
-import com.github.command17.enchantedbooklib.api.events.registry.RegisterFuelEvent;
-import com.github.command17.enchantedbooklib.api.events.registry.RegisterVillagerTradeEvent;
-import com.github.command17.enchantedbooklib.api.events.registry.RegistryEvent;
+import com.github.command17.enchantedbooklib.api.events.registry.*;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.object.builder.v1.trade.TradeOfferHelper;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -58,9 +58,17 @@ public final class EnchantedBookLibFabric implements ModInitializer {
     }
 
     private static void invokePostRegisterEvents() {
-        EventManager.invoke(new RegisterFuelEvent());
-        EventManager.invoke(new RegisterEntityAttributesEvent());
-        EventManager.invoke(new RegisterVillagerTradeEvent.VillagerTrade());
-        EventManager.invoke(new RegisterVillagerTradeEvent.WanderingTraderTrade());
+        EventManager.invoke(new RegisterFuelEvent((time, item) -> {
+            if (time > 0) {
+                FuelRegistry.INSTANCE.add(item, time);
+            } else {
+                FuelRegistry.INSTANCE.remove(item);
+            }
+        }));
+        EventManager.invoke(new RegisterEntityAttributesEvent(FabricDefaultAttributeRegistry::register));
+        EventManager.invoke(new RegisterVillagerTradeEvent(
+                (profession, level, trade) -> TradeOfferHelper.registerVillagerOffers(profession, level, (trades) -> trades.add(trade))));
+        EventManager.invoke(new RegisterWanderingTraderTradeEvent(
+                (rare, trade) -> TradeOfferHelper.registerWanderingTraderOffers(rare ? 2 : 1, (trades) -> trades.add(trade))));
     }
 }
