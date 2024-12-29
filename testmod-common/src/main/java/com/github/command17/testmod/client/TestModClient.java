@@ -22,7 +22,7 @@ public final class TestModClient {
     }
 
     @EventListener
-    private static void registerRenderers(RegisterRendererEvent.Renderer event) {
+    private static void registerRenderers(RegisterRendererEvent event) {
         event.registerEntityRenderer(ModEntities.STRONG_TNT, StrongTntRenderer::new);
     }
 }
