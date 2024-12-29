@@ -4,7 +4,9 @@ import com.github.command17.enchantedbooklib.api.config.LibConfigs;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.event.annotation.EventListener;
 import com.github.command17.enchantedbooklib.api.events.registry.RegisterFuelEvent;
+import com.github.command17.testmod.block.ModBlocks;
 import com.github.command17.testmod.config.ModCommonConfig;
+import com.github.command17.testmod.entity.ModEntities;
 import com.github.command17.testmod.event.ModEvents;
 import com.github.command17.testmod.item.ModItems;
 import com.github.command17.testmod.item.tab.ModCreativeModeTabs;
@@ -23,7 +25,9 @@ public final class TestMod {
         EventManager.registerListeners(TestMod.class);
 
         ModEvents.register();
+        ModBlocks.register();
         ModItems.register();
+        ModEntities.register();
         ModCreativeModeTabs.register();
 
         LOGGER.info("Initialized.");

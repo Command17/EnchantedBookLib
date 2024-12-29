@@ -1,5 +1,10 @@
 {
   "tab.testmod.main": "Test Mod Items",
+
   "item.testmod.magic_stick": "Magic Stick",
-  "item.testmod.fuel_stick": "Fuel Stick"
+  "item.testmod.fuel_stick": "Fuel Stick",
+
+  "block.testmod.strong_tnt": "Strong TNT",
+
+  "entity.testmod.strong_tnt": "Primed Strong TNT"
 }

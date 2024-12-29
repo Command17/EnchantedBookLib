@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
-public class ModCreativeModeTabs {
+public final class ModCreativeModeTabs {
     private static final RegistryHelper<CreativeModeTab> REGISTRY = RegistryHelper.create(TestMod.MOD_ID, Registries.CREATIVE_MODE_TAB);
 
     public static IRegistrySupplier<CreativeModeTab> MAIN = REGISTRY.register("main",
