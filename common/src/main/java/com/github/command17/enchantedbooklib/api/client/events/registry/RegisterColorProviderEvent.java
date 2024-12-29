@@ -12,26 +12,30 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class RegisterColorProviderEvent extends Event {
-    @SafeVarargs
-    public final void register(BlockColor color, Supplier<Block>... blocks) {
-        ColorProviderRegistry.register(color, blocks);
-    }
+public abstract class RegisterColorProviderEvent extends Event {
+    public static class ItemProvider extends RegisterColorProviderEvent {
+        @SafeVarargs
+        public final void register(ItemColor color, Supplier<Item>... items) {
+            ColorProviderRegistry.register(color, items);
+        }
 
-    @SafeVarargs
-    public final void register(ItemColor color, Supplier<Item>... items) {
-        ColorProviderRegistry.register(color, items);
-    }
-
-    public void register(BlockColor color, Block... blocks) {
-        for (Block block: blocks) {
-            ColorProviderRegistry.register(color, () -> block);
+        public void register(ItemColor color, Item... items) {
+            for (Item item: items) {
+                ColorProviderRegistry.register(color, () -> item);
+            }
         }
     }
 
-    public void register(ItemColor color, Item... items) {
-        for (Item item: items) {
-            ColorProviderRegistry.register(color, () -> item);
+    public static class BlockProvider extends RegisterColorProviderEvent {
+        @SafeVarargs
+        public final void register(BlockColor color, Supplier<Block>... blocks) {
+            ColorProviderRegistry.register(color, blocks);
+        }
+
+        public void register(BlockColor color, Block... blocks) {
+            for (Block block: blocks) {
+                ColorProviderRegistry.register(color, () -> block);
+            }
         }
     }
 }

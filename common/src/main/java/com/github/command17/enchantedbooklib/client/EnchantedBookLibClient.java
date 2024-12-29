@@ -1,11 +1,7 @@
 package com.github.command17.enchantedbooklib.client;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
-import com.github.command17.enchantedbooklib.api.client.events.ClientSetupEvent;
 import com.github.command17.enchantedbooklib.api.client.events.entity.ClientPlayerEvent;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterColorProviderEvent;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterParticleProviderEvent;
-import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterRendererEvent;
 import com.github.command17.enchantedbooklib.api.config.LibConfigs;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.event.annotation.EventListener;
@@ -23,13 +19,6 @@ public final class EnchantedBookLibClient {
         NetworkingHelper.registerS2CHandler(SyncConfigPacket.TYPE, (packet, config) -> {});
 
         EnchantedBookLib.LOGGER.info("Initialized Client.");
-    }
-
-    @EventListener
-    private static void invokePostRegistrationEvents(ClientSetupEvent event) {
-        EventManager.invoke(new RegisterRendererEvent());
-        EventManager.invoke(new RegisterParticleProviderEvent());
-        EventManager.invoke(new RegisterColorProviderEvent());
     }
 
     @EventListener

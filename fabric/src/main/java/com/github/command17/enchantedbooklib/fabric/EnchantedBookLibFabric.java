@@ -12,6 +12,9 @@ import com.github.command17.enchantedbooklib.api.events.fabric.ModifyLootTableEv
 import com.github.command17.enchantedbooklib.api.events.fabric.ServerLifecycleEventImpl;
 import com.github.command17.enchantedbooklib.api.events.fabric.ServerTickEventImpl;
 import com.github.command17.enchantedbooklib.api.events.level.fabric.ServerLevelTickEventImpl;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterEntityAttributesEvent;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterFuelEvent;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterVillagerTradeEvent;
 import com.github.command17.enchantedbooklib.api.events.registry.RegistryEvent;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.loader.api.FabricLoader;
@@ -41,6 +44,7 @@ public final class EnchantedBookLibFabric implements ModInitializer {
                 .forEach(EnchantedModInitializer::onInitialize);
 
         invokeRegistryEvents();
+        invokePostRegisterEvents();
         EventManager.invoke(new SetupEvent());
     }
 
@@ -51,5 +55,12 @@ public final class EnchantedBookLibFabric implements ModInitializer {
             Registry<?> registry = BuiltInRegistries.REGISTRY.get(registryName);
             EventManager.invoke(new RegistryEvent(registryKey, registry, (id, entry) -> Registry.register((Registry<? super Object>) registry, id, entry.get())));
         }
+    }
+
+    private static void invokePostRegisterEvents() {
+        EventManager.invoke(new RegisterFuelEvent());
+        EventManager.invoke(new RegisterEntityAttributesEvent());
+        EventManager.invoke(new RegisterVillagerTradeEvent.VillagerTrade());
+        EventManager.invoke(new RegisterVillagerTradeEvent.WanderingTraderTrade());
     }
 }

@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterEntityAttributesEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -23,6 +25,8 @@ public final class EntityAttributeRegistryImpl {
 
     @SubscribeEvent
     private static void event(EntityAttributeCreationEvent event) {
+        EventManager.invoke(new RegisterEntityAttributesEvent());
+
         ATTRIBUTE_MAP.forEach((entityType, attributes) -> event.put(entityType.get(), attributes));
     }
 }

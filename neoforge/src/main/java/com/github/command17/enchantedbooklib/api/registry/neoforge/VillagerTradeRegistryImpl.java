@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterVillagerTradeEvent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.core.NonNullList;
@@ -37,6 +39,8 @@ public final class VillagerTradeRegistryImpl {
 
     @SubscribeEvent
     private static void event(VillagerTradesEvent event) {
+        EventManager.invoke(new RegisterVillagerTradeEvent.VillagerTrade());
+
         var trades = TRADE_MAP.get(event.getType());
 
         if (trades != null) {
@@ -47,6 +51,8 @@ public final class VillagerTradeRegistryImpl {
 
     @SubscribeEvent
     private static void event(WandererTradesEvent event) {
+        EventManager.invoke(new RegisterVillagerTradeEvent.WanderingTraderTrade());
+
         event.getGenericTrades().addAll(WANDERING_TRADER_TRADES);
         event.getRareTrades().addAll(WANDERING_TRADER_TRADES_RARE);
     }

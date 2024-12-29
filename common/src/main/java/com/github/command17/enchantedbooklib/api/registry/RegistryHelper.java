@@ -70,19 +70,19 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
         return ResourceKey.create(this.registryKey, this.makeId(name));
     }
 
-    public IRegistrySupplier<T> register(String name, Supplier<T> entry) {
+    public<E extends T> IRegistrySupplier<E> register(String name, Supplier<? extends E> entry) {
         return this.register(this.makeId(name), entry);
     }
 
-    public IRegistrySupplier<T> register(ResourceLocation id, Supplier<T> entry) {
+    @SuppressWarnings("unchecked")
+    public<E extends T> IRegistrySupplier<E> register(ResourceLocation id, Supplier<? extends E> entry) {
         if (this.frozen) {
             EnchantedBookLib.LOGGER.error("RegistryHelper is frozen!");
             return null;
         }
 
         ResourceKey<T> key = ResourceKey.create(this.registryKey, id);
-        Supplier<T> memoizedEntry = Suppliers.memoize(entry::get);
-
+        Supplier<E> memoizedEntry = Suppliers.memoize(entry::get);
         IRegistrySupplier<T> registrySupplier = new IRegistrySupplier<>() {
             @Override
             public ResourceLocation getId() {
@@ -101,7 +101,7 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
         };
 
         this.entries.add(registrySupplier);
-        return registrySupplier;
+        return (IRegistrySupplier<E>) registrySupplier;
     }
 
     public void register() {
@@ -163,25 +163,20 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
             this.tab = tab;
         }
 
-        public IRegistrySupplier<Item> registerSimpleBlockItem(String name, Supplier<Block> block) {
-            return this.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
-        }
-
         public IRegistrySupplier<Item> registerSimpleItem(String name) {
             return this.register(name, () -> new Item(new Item.Properties()));
         }
 
-        public IRegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> itemFactory) {
+        public IRegistrySupplier<Item> registerSimpleBlockItem(String name, Supplier<Block> block) {
+            return this.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+        }
+
+        public<T extends Item> IRegistrySupplier<T> registerItem(String name, Function<Item.Properties, T> itemFactory) {
             return this.register(name, () -> itemFactory.apply(new Item.Properties()));
         }
 
-        public IRegistrySupplier<Item> registerItem(String name, Function<Item.Properties, Item> itemFactory, Item.Properties properties) {
+        public<T extends Item> IRegistrySupplier<T> registerItem(String name, Function<Item.Properties, T> itemFactory, Item.Properties properties) {
             return this.register(name, () -> itemFactory.apply(properties));
-        }
-
-        @Override
-        public IRegistrySupplier<Item> register(ResourceLocation id, Supplier<Item> entry) {
-            return super.register(id, entry);
         }
 
         @Override

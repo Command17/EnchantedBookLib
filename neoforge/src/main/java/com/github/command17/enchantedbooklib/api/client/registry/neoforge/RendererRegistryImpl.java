@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.client.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterRendererEvent;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -42,14 +44,20 @@ public final class RendererRegistryImpl {
     @SuppressWarnings("unchecked")
     @SubscribeEvent
     private static void event(EntityRenderersEvent.RegisterRenderers event) {
+        EventManager.invoke(new RegisterRendererEvent.Renderer());
+
         ENTITY_RENDERER_MAP.forEach(
                 (entityType, renderer) -> event.registerEntityRenderer(entityType.get(), (EntityRendererProvider<Entity>) renderer));
         BLOCK_ENTITY_RENDERER_MAP.forEach(
                 (blockEntityType, renderer) -> event.registerBlockEntityRenderer(blockEntityType.get(), (BlockEntityRendererProvider<BlockEntity>) renderer));
+
+        EnchantedBookLib.LOGGER.info("REGISTERED");
     }
 
     @SubscribeEvent
     private static void event(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        EventManager.invoke(new RegisterRendererEvent.Layer());
+
         ENTITY_LAYER_MAP.forEach(event::registerLayerDefinition);
     }
 }

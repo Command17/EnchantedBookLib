@@ -16,28 +16,32 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class RegisterRendererEvent extends Event {
-    public<T extends Entity> void registerEntityRenderer(Supplier<? extends EntityType<? extends T>> entityType, EntityRendererProvider<T> renderer) {
-        RendererRegistry.registerEntityRenderer(entityType, renderer);
+public abstract class RegisterRendererEvent extends Event {
+    public static class Renderer extends RegisterRendererEvent {
+        public<T extends Entity> void registerEntityRenderer(Supplier<? extends EntityType<? extends T>> entityType, EntityRendererProvider<T> renderer) {
+            RendererRegistry.registerEntityRenderer(entityType, renderer);
+        }
+
+        public<T extends BlockEntity> void registerBlockEntityRenderer(Supplier<? extends BlockEntityType<? extends T>> blockEntityType, BlockEntityRendererProvider<T> renderer) {
+            RendererRegistry.registerBlockEntityRenderer(blockEntityType, renderer);
+        }
+
+        public<T extends Entity> void registerEntityRenderer(EntityType<? extends T> entityType, EntityRendererProvider<T> renderer) {
+            RendererRegistry.registerEntityRenderer(() -> entityType, renderer);
+        }
+
+        public<T extends BlockEntity> void registerBlockEntityRenderer(BlockEntityType<? extends T> blockEntityType, BlockEntityRendererProvider<T> renderer) {
+            RendererRegistry.registerBlockEntityRenderer(() -> blockEntityType, renderer);
+        }
     }
 
-    public void registerEntityModelLayer(ModelLayerLocation location, Supplier<LayerDefinition> layerDefinition) {
-        RendererRegistry.registerEntityModelLayer(location, layerDefinition);
-    }
+    public static class Layer extends RegisterRendererEvent {
+        public void register(ModelLayerLocation location, Supplier<LayerDefinition> layerDefinition) {
+            RendererRegistry.registerEntityModelLayer(location, layerDefinition);
+        }
 
-    public<T extends BlockEntity> void registerBlockEntityRenderer(Supplier<? extends BlockEntityType<? extends T>> blockEntityType, BlockEntityRendererProvider<T> renderer) {
-        RendererRegistry.registerBlockEntityRenderer(blockEntityType, renderer);
-    }
-
-    public<T extends Entity> void registerEntityRenderer(EntityType<? extends T> entityType, EntityRendererProvider<T> renderer) {
-        RendererRegistry.registerEntityRenderer(() -> entityType, renderer);
-    }
-
-    public void registerEntityModelLayer(ModelLayerLocation location, LayerDefinition layerDefinition) {
-        RendererRegistry.registerEntityModelLayer(location, () -> layerDefinition);
-    }
-
-    public<T extends BlockEntity> void registerBlockEntityRenderer(BlockEntityType<? extends T> blockEntityType, BlockEntityRendererProvider<T> renderer) {
-        RendererRegistry.registerBlockEntityRenderer(() -> blockEntityType, renderer);
+        public void register(ModelLayerLocation location, LayerDefinition layerDefinition) {
+            RendererRegistry.registerEntityModelLayer(location, () -> layerDefinition);
+        }
     }
 }

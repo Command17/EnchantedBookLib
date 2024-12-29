@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.client.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterColorProviderEvent;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.google.common.collect.ArrayListMultimap;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
@@ -38,11 +40,15 @@ public final class ColorProviderRegistryImpl {
 
     @SubscribeEvent
     private static void event(RegisterColorHandlersEvent.Block event) {
+        EventManager.invoke(new RegisterColorProviderEvent.BlockProvider());
+
         BLOCK_COLOR_MAP.forEach((color, block) -> event.register(color, block.get()));
     }
 
     @SubscribeEvent
     private static void event(RegisterColorHandlersEvent.Item event) {
+        EventManager.invoke(new RegisterColorProviderEvent.ItemProvider());
+
         ITEM_COLOR_MAP.forEach((color, item) -> event.register(color, item.get()));
     }
 }

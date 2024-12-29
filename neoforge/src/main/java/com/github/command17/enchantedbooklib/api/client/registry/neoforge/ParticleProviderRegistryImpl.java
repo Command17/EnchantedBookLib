@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.client.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.client.events.registry.RegisterParticleProviderEvent;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.core.particles.ParticleOptions;
@@ -28,6 +30,8 @@ public final class ParticleProviderRegistryImpl {
     @SuppressWarnings("unchecked")
     @SubscribeEvent
     private static void event(RegisterParticleProvidersEvent event) {
+        EventManager.invoke(new RegisterParticleProviderEvent());
+
         PROVIDER_MAP.forEach(
                 (particleType, provider) -> event.registerSpecial((ParticleType<ParticleOptions>) particleType.get(), (ParticleProvider<ParticleOptions>) provider));
     }

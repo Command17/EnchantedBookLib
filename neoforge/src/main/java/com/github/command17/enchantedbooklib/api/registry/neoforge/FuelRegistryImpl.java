@@ -1,6 +1,8 @@
 package com.github.command17.enchantedbooklib.api.registry.neoforge;
 
 import com.github.command17.enchantedbooklib.EnchantedBookLib;
+import com.github.command17.enchantedbooklib.api.event.EventManager;
+import com.github.command17.enchantedbooklib.api.events.registry.RegisterFuelEvent;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -14,6 +16,8 @@ public final class FuelRegistryImpl {
 
     private static final Object2IntOpenHashMap<ItemLike> FUEL_MAP = new Object2IntOpenHashMap<>();
 
+    private static boolean firedEvent = false;
+
     public static void registerFuel(int time, ItemLike... items) {
         for (ItemLike item: items) {
             FUEL_MAP.put(item, time);
@@ -26,6 +30,11 @@ public final class FuelRegistryImpl {
 
     @SubscribeEvent
     private static void event(FurnaceFuelBurnTimeEvent event) {
+        if (!firedEvent) {
+            EventManager.invoke(new RegisterFuelEvent());
+            firedEvent = true;
+        }
+
         ItemStack stack = event.getItemStack();
 
         if (FUEL_MAP.containsKey(stack.getItem())) {
