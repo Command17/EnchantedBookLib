@@ -70,6 +70,18 @@ remapJar {
     atAccessWideners.add "enchantedbooklib.accesswidener"
 }
 
+sourcesJar {
+    afterEvaluate {
+        [":common"].forEach {
+            def depSources = project(it).sourcesJar
+            dependsOn depSources
+            from(depSources.archiveFile.map { zipTree(it) }) {
+                exclude "enchantedbooklib.accesswidener"
+            }
+        }
+    }
+}
+
 var changelogText = rootProject.file("Changelog.md").text
 
 publishMods {
