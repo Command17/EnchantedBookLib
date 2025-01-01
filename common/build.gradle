@@ -189,7 +189,7 @@ publishing {
             url = uri("https://maven.pkg.github.com/Command17/EnchantedBookLib")
             credentials {
                 username = "Command17"
-                password = providers.environmentVariable("GITHUB_PKG_TOKEN")
+                password = System.getenv("GITHUB_PKG_TOKEN")
             }
         }
     }
