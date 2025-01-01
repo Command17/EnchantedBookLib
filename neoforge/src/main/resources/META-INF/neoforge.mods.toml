@@ -29,7 +29,7 @@ side = "BOTH"
 
 
 [[mixins]]
-config = "enchantedbooklib.mixins.json"
+config = "enchantedbooklib-common.mixins.json"
 
 [[mixins]]
 config = "enchantedbooklib-neoforge.mixins.json"
