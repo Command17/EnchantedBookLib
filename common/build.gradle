@@ -168,3 +168,29 @@ static ClassNode loadClass(Path path) {
 /**
  * End of access widener code.
  */
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = archivesBaseName
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Command17/EnchantedBookLib"
+            credentials {
+                username = "Command17"
+                password = providers.environmentVariable("GITHUB_PKG_TOKEN")
+            }
+        }
+    }
+}

@@ -1,6 +1,7 @@
 plugins {
     id 'com.github.johnrengelman.shadow'
     id 'maven-publish'
+    id 'me.modmuss50.mod-publish-plugin'
 }
 
 archivesBaseName = archives_name
@@ -56,8 +57,96 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
+
+    exclude "enchantedbooklib.accesswidener"
 }
 
 remapJar {
+    injectAccessWidener = true
     input.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+sourcesJar {
+    afterEvaluate {
+        [":common"].forEach {
+            def depSources = project(it).sourcesJar
+            dependsOn depSources
+            from(depSources.archiveFile.map { zipTree(it) }) {
+                exclude "enchantedbooklib.accesswidener"
+            }
+        }
+    }
+}
+
+var changelogText = rootProject.file("Changelog.md").text
+
+publishMods {
+    file = remapJar.archiveFile
+    modLoaders.add("fabric")
+    modLoaders.add("quilt")
+    displayName = "EnchantedBookLib v${project.version}"
+    changelog = changelogText
+
+    if (project.release_type == "alpha") {
+        type = ALPHA
+    } else if (project.release_type == "beta") {
+        type = BETA
+    } else if (project.release_type == "stable") {
+        type = STABLE
+    }
+
+    modrinth {
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        projectId = "36JtkTh1"
+        minecraftVersions.add(minecraft_version)
+
+        // Fabric API
+        requires {
+            id = "P7dR8mSH"
+        }
+    }
+
+    curseforge {
+        accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")
+        clientRequired = true
+        serverRequired = true
+        javaVersions.add(JavaVersion.VERSION_21)
+        projectId = "1169618"
+        minecraftVersions.add(minecraft_version)
+
+        requires("fabric-api")
+    }
+
+    github {
+        accessToken = providers.environmentVariable("GITHUB_TOKEN")
+        repository = "Command17/EnchantedBookLib"
+        commitish = branch
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = archivesBaseName
+            from components.java
+        }
+    }
+
+    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+    repositories {
+        // Add repositories to publish to here.
+        // Notice: This block does NOT have the same function as the block in the top level.
+        // The repositories here will be used for publishing your artifact, not for
+        // retrieving dependencies.
+
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/Command17/EnchantedBookLib"
+            credentials {
+                username = "Command17"
+                password = providers.environmentVariable("GITHUB_PKG_TOKEN")
+            }
+        }
+    }
 }
