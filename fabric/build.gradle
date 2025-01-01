@@ -54,15 +54,11 @@ processResources {
     }
 }
 
-import com.github.jengelman.gradle.plugins.shadow.transformers.DontIncludeResourceTransformer
-
 shadowJar {
+    exclude "architectury.common.json"
+
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
-
-    transform(DontIncludeResourceTransformer) {
-        resource = project(":common").file("src/main/java/resources/architectury.common.json")
-    }
 }
 
 remapJar {
@@ -126,12 +122,6 @@ publishMods {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
         repository = "Command17/EnchantedBookLib"
         commitish = branch
-    }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
     }
 }
 
