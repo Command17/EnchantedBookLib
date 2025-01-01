@@ -41,10 +41,14 @@ public final class ModEvents {
     }
 
     @EventListener
+    private static void onEntityDeath(LivingEntityEvent.Death event) {
+        TestMod.LOGGER.info("{} died!", event.getEntity().getName().getString());
+    }
+
+    @EventListener
     private static void onRegisterCommands(RegisterCommandEvent event) {
         event.getDispatcher().register(Commands.literal("testsay").executes((context) -> {
             context.getSource().sendSystemMessage(Component.literal("You used '/testsay'! I will now say test: \"test\""));
-
             return 1;
         }));
     }
