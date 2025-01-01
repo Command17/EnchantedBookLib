@@ -21,13 +21,13 @@ public final class MenuRegistryImpl {
         player.openMenu(menuProvider, menuProvider::writeExtraData);
     }
 
-    public static <T extends AbstractContainerMenu> MenuType<T> createMenuType(MenuRegistry.MenuTypeFactory<T> factory) {
+    public static<T extends AbstractContainerMenu> MenuType<T> createMenuType(MenuRegistry.MenuTypeFactory<T> factory) {
         return IMenuTypeExtension.create(factory::create);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static <C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> void registerScreenFactory(MenuType<? extends C> menuType, MenuRegistry.ScreenFactory<C, S> factory) {
+    public static<C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> void registerScreenFactory(MenuType<? extends C> menuType, MenuRegistry.ScreenFactory<C, S> factory) {
         EventBusHooks.getModEventBus(EnchantedBookLib.MOD_ID).ifPresent(
-                (eventBus) -> eventBus.addListener(RegisterMenuScreensEvent.class, event -> event.register(menuType, factory::create)));
+                (eventBus) -> eventBus.addListener(RegisterMenuScreensEvent.class, (event) -> event.register(menuType, factory::create)));
     }
 }
