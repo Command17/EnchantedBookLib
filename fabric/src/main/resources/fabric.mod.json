@@ -21,7 +21,7 @@
     ]
   },
   "mixins": [
-    "enchantedbooklib.mixins.json",
+    "enchantedbooklib-common.mixins.json",
     "enchantedbooklib-fabric.mixins.json"
   ],
   "depends": {
