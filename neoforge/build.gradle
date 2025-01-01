@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.DontIncludeResourceTransformer
+
 plugins {
     id 'com.github.johnrengelman.shadow'
     id 'maven-publish'
@@ -59,11 +61,15 @@ processResources {
     }
 }
 
+import com.github.jengelman.gradle.plugins.shadow.transformers.DontIncludeResourceTransformer
+
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
 
-    exclude "architectury.common.json"
+    transform(DontIncludeResourceTransformer) {
+        resource = project(":common").file("src/main/java/resources/architectury.common.json")
+    }
 }
 
 remapJar {
