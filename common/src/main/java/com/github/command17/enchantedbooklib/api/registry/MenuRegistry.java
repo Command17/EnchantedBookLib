@@ -58,7 +58,7 @@ public final class MenuRegistry {
 
     @Environment(EnvType.CLIENT)
     @ExpectPlatform
-    public static <C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> void registerScreenFactory(MenuType<? extends C> menuType, ScreenFactory<C, S> factory) {
+    public static<C extends AbstractContainerMenu, S extends Screen & MenuAccess<C>> void registerScreenFactory(MenuType<? extends C> menuType, ScreenFactory<C, S> factory) {
         throw new AssertionError();
     }
 
