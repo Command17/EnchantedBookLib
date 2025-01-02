@@ -185,11 +185,11 @@ publishing {
         // retrieving dependencies.
 
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/Command17/EnchantedBookLib")
+            name = "Repsy"
+            url = uri("https://repo.repsy.io/mvn/command17/modrepo")
             credentials {
-                username = "Command17"
-                password = System.getenv("GITHUB_PKG_TOKEN")
+                username = "command17"
+                password = System.getenv("REPSY_MVN_PASS")
             }
         }
     }
