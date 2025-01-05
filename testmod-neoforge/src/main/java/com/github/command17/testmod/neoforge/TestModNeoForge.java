@@ -10,6 +10,6 @@ import net.neoforged.fml.common.Mod;
 public final class TestModNeoForge {
     public TestModNeoForge() {
         TestMod.init();
-        EnvSideExecutor.runOn(EnvSide.CLIENT, TestModClient::init);
+        EnvSideExecutor.runOn(EnvSide.CLIENT, () -> TestModClient::init);
     }
 }

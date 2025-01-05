@@ -10,6 +10,6 @@ import net.neoforged.fml.common.Mod;
 public final class EnchantedBookLibNeoForge {
     public EnchantedBookLibNeoForge() {
         EnchantedBookLib.init();
-        EnvSideExecutor.runOn(EnvSide.CLIENT, EnchantedBookLibClient::init);
+        EnvSideExecutor.runOn(EnvSide.CLIENT, () -> EnchantedBookLibClient::init);
     }
 }

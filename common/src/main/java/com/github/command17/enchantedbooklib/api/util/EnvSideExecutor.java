@@ -1,15 +1,17 @@
 package com.github.command17.enchantedbooklib.api.util;
 
+import java.util.function.Supplier;
+
 public final class EnvSideExecutor {
     private EnvSideExecutor() {}
 
-    public static void runOn(EnvSide env, Runnable runnable) {
+    public static void runOn(EnvSide env, Supplier<Runnable> runnable) {
         if (PlatformHelper.getEnvSide() == env) {
-            runnable.run();
+            runnable.get().run();
         }
     }
 
-    public static void runOnBoth(Runnable clientRunnable, Runnable serverRunnable) {
+    public static void runOnBoth(Supplier<Runnable> clientRunnable, Supplier<Runnable> serverRunnable) {
         runOn(EnvSide.CLIENT, clientRunnable);
         runOn(EnvSide.SERVER, serverRunnable);
     }
