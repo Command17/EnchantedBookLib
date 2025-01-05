@@ -7,6 +7,7 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -83,6 +84,7 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
 
         ResourceKey<T> key = ResourceKey.create(this.registryKey, id);
         Supplier<E> memoizedEntry = Suppliers.memoize(entry::get);
+        Supplier<Holder<T>> memoizedHolderGetter = Suppliers.memoize(() -> this.getRegistry().getHolder(id).orElse(null));
         IRegistrySupplier<T> registrySupplier = new IRegistrySupplier<>() {
             @Override
             public ResourceLocation getId() {
@@ -92,6 +94,11 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
             @Override
             public ResourceKey<T> getKey() {
                 return key;
+            }
+
+            @Override
+            public Holder<T> getHolder() {
+                return memoizedHolderGetter.get();
             }
 
             @Override
