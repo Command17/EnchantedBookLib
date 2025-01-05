@@ -118,8 +118,6 @@ publishMods {
         javaVersions.add(JavaVersion.VERSION_21)
         projectId = "1169618"
         minecraftVersions.add(minecraft_version)
-
-        requires("fabric-api")
     }
 
     github {
