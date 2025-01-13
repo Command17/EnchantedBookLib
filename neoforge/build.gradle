@@ -122,8 +122,7 @@ publishMods {
 
     github {
         accessToken = providers.environmentVariable("GITHUB_TOKEN")
-        repository = "Command17/EnchantedBookLib"
-        commitish = branch
+        parent project(":").tasks.named("publishGithub")
     }
 }
 
