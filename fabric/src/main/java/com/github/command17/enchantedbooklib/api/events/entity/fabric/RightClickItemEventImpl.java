@@ -3,7 +3,6 @@ package com.github.command17.enchantedbooklib.api.events.entity.fabric;
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.events.entity.RightClickItemEvent;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.minecraft.world.InteractionResultHolder;
 import org.jetbrains.annotations.ApiStatus;
 
 public final class RightClickItemEventImpl {
