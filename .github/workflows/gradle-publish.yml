@@ -8,8 +8,10 @@
 name: Publish Gradle Package
 
 on:
-  workflow_dispatch:
-
+  push:
+    branches:
+    - release/*
+    
 jobs:
   build:
 
