@@ -1,5 +1,5 @@
 {
-  "required": true,
+  "required": false,
   "package": "com.github.command17.enchantedbooklib.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8",
