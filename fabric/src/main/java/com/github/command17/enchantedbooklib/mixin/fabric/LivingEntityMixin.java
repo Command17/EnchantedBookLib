@@ -2,6 +2,7 @@ package com.github.command17.enchantedbooklib.mixin.fabric;
 
 import com.github.command17.enchantedbooklib.api.event.EventManager;
 import com.github.command17.enchantedbooklib.api.events.entity.LivingEntityEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,8 +23,8 @@ public class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"), cancellable = true)
-    private void enchantedbooklib$onHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"), cancellable = true)
+    private void enchantedbooklib$onHurt(ServerLevel level, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntityEvent.Damage livingEntityDamageEvent = new LivingEntityEvent.Damage((LivingEntity) ((Object) this), source, amount);
         EventManager.invoke(livingEntityDamageEvent);
 

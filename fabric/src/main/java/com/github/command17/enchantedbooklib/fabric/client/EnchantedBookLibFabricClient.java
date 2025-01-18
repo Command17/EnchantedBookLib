@@ -18,13 +18,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemTintSources;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 @Environment(EnvType.CLIENT)
@@ -58,6 +58,6 @@ public final class EnchantedBookLibFabricClient implements ClientModInitializer 
                 (entityType, renderer) -> EntityRendererRegistry.register(entityType, (EntityRendererProvider<Entity>) renderer),
                 (blockEntityType, renderer) -> BlockEntityRenderers.register(blockEntityType, (BlockEntityRendererProvider<BlockEntity>) renderer)));
         EventManager.invoke(new RegisterBlockColorProviderEvent(ColorProviderRegistry.BLOCK::register));
-        EventManager.invoke(new RegisterItemColorProviderEvent(ColorProviderRegistry.ITEM::register));
+        EventManager.invoke(new RegisterItemTintSourceEvent(ItemTintSources.ID_MAPPER::put));
     }
 }

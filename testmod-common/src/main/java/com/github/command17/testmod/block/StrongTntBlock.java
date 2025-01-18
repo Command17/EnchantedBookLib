@@ -3,11 +3,12 @@ package com.github.command17.testmod.block;
 import com.github.command17.testmod.entity.StrongTntEntity;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +60,7 @@ public class StrongTntBlock extends Block {
     }
 
     @Override
-    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, @Nullable Orientation orientation, boolean movedByPiston) {
         if (level.hasNeighborSignal(pos)) {
             explode(level, pos);
             level.removeBlock(pos, false);
@@ -76,7 +78,7 @@ public class StrongTntBlock extends Block {
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos pos, Explosion explosion) {
+    public void wasExploded(ServerLevel level, BlockPos pos, Explosion explosion) {
         if (!level.isClientSide) {
             StrongTntEntity tntEntity = new StrongTntEntity(level, pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f, explosion.getIndirectSourceEntity());
             int i = tntEntity.getFuse();
@@ -100,7 +102,7 @@ public class StrongTntBlock extends Block {
 
     @NotNull
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!stack.is(Items.FLINT_AND_STEEL) && !stack.is(Items.FIRE_CHARGE)) {
             return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
         } else {
@@ -115,17 +117,17 @@ public class StrongTntBlock extends Block {
             }
 
             player.awardStat(Stats.ITEM_USED.get(item));
-            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.SUCCESS;
         }
     }
 
     @Override
     protected void onProjectileHit(Level level, BlockState state, BlockHitResult hit, Projectile projectile) {
-        if (!level.isClientSide) {
+        if (level instanceof ServerLevel serverLevel) {
             BlockPos blockPos = hit.getBlockPos();
             Entity entity = projectile.getOwner();
 
-            if (projectile.isOnFire() && projectile.mayInteract(level, blockPos)) {
+            if (projectile.isOnFire() && projectile.mayInteract(serverLevel, blockPos)) {
                 explode(level, blockPos, entity instanceof LivingEntity ? (LivingEntity)entity : null);
                 level.removeBlock(blockPos, false);
             }

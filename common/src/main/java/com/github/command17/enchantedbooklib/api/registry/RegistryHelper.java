@@ -42,7 +42,7 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
 
     @SuppressWarnings("unchecked")
     public static<T> RegistryHelper<T> create(String modId, ResourceKey<? extends Registry<T>> registryKey) {
-        return new RegistryHelper<>(modId, registryKey, (Registry<T>) BuiltInRegistries.REGISTRY.get(registryKey.location()));
+        return new RegistryHelper<>(modId, registryKey, (Registry<T>) BuiltInRegistries.REGISTRY.getValue(registryKey.location()));
     }
 
     public static<T> RegistryHelper<T> create(String modId, Registry<T> registry) {
@@ -82,7 +82,7 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
 
         ResourceKey<T> key = ResourceKey.create(this.registryKey, id);
         Supplier<E> memoizedEntry = Suppliers.memoize(entry::get);
-        Supplier<Holder<T>> memoizedHolderGetter = Suppliers.memoize(() -> this.getRegistry().getHolder(id).orElse(null));
+        Supplier<Holder<T>> memoizedHolderGetter = Suppliers.memoize(() -> this.getRegistry().get(id).orElse(null));
         IRegistrySupplier<T> registrySupplier = new IRegistrySupplier<>() {
             @Override
             public ResourceLocation getId() {
@@ -169,19 +169,19 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
         }
 
         public IRegistrySupplier<Item> registerSimpleItem(String name) {
-            return this.register(name, () -> new Item(new Item.Properties()));
+            return this.register(name, () -> new Item(new Item.Properties().setId(this.makeKey(name))));
         }
 
         public IRegistrySupplier<Item> registerSimpleBlockItem(String name, Supplier<Block> block) {
-            return this.register(name, () -> new BlockItem(block.get(), new Item.Properties()));
+            return this.register(name, () -> new BlockItem(block.get(), new Item.Properties().useBlockDescriptionPrefix().setId(this.makeKey(name))));
         }
 
         public<T extends Item> IRegistrySupplier<T> registerItem(String name, Function<Item.Properties, T> itemFactory) {
-            return this.register(name, () -> itemFactory.apply(new Item.Properties()));
+            return this.register(name, () -> itemFactory.apply(new Item.Properties().setId(this.makeKey(name))));
         }
 
         public<T extends Item> IRegistrySupplier<T> registerItem(String name, Function<Item.Properties, T> itemFactory, Item.Properties properties) {
-            return this.register(name, () -> itemFactory.apply(properties));
+            return this.register(name, () -> itemFactory.apply(properties.setId(this.makeKey(name))));
         }
 
         @Override
@@ -201,11 +201,11 @@ public class RegistryHelper<T> implements Iterable<IRegistrySupplier<T>> {
         }
 
         public IRegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> blockFactory, Supplier<Block> copyBlock) {
-            return this.register(name, () -> blockFactory.apply(BlockBehaviour.Properties.ofFullCopy(copyBlock.get())));
+            return this.register(name, () -> blockFactory.apply(BlockBehaviour.Properties.ofFullCopy(copyBlock.get()).setId(this.makeKey(name))));
         }
 
         public IRegistrySupplier<Block> registerBlock(String name, Function<BlockBehaviour.Properties, Block> blockFactory, BlockBehaviour.Properties properties) {
-            return this.register(name, () -> blockFactory.apply(properties));
+            return this.register(name, () -> blockFactory.apply(properties.setId(this.makeKey(name))));
         }
     }
 }

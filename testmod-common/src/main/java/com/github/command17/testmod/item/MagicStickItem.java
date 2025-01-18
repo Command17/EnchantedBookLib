@@ -3,7 +3,7 @@ package com.github.command17.testmod.item;
 import com.github.command17.testmod.TestMod;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,28 +19,28 @@ public class MagicStickItem extends Item {
 
     @NotNull
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 
-        player.sendSystemMessage(Component.literal("Is Client: " + level.isClientSide));
+        player.displayClientMessage(Component.literal("Is Client: " + level.isClientSide), false);
 
         if (player.isShiftKeyDown()) {
             if (TestMod.CONFIG.syncedBoolValue.get()) {
                 if (level.isClientSide) {
-                    player.sendSystemMessage(Component.literal("syncedBoolValue is enabled on the server!"));
+                    player.displayClientMessage(Component.literal("syncedBoolValue is enabled on the server!"), false);
                 } else {
-                    player.sendSystemMessage(Component.literal("syncedBoolValue is enabled!"));
+                    player.displayClientMessage(Component.literal("syncedBoolValue is enabled!"), false);
                 }
             }
         } else {
             if (TestMod.CONFIG.boolValue.get()) {
-                player.sendSystemMessage(Component.literal("boolValue is enabled!"));
+                player.displayClientMessage(Component.literal("boolValue is enabled!"), false);
             }
 
-            player.sendSystemMessage(Component.literal(Arrays.toString(TestMod.CONFIG.stringArray.get())));
+            player.displayClientMessage(Component.literal(Arrays.toString(TestMod.CONFIG.stringArray.get())), false);
         }
 
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
+        return InteractionResult.SUCCESS.heldItemTransformedTo(stack);
     }
 
     @Override

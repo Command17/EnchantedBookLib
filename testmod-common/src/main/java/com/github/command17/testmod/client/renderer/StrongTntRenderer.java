@@ -8,12 +8,12 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.TntMinecartRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.entity.state.TntRenderState;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.item.PrimedTnt;
 import org.jetbrains.annotations.NotNull;
 
-public class StrongTntRenderer extends EntityRenderer<StrongTntEntity> {
+public class StrongTntRenderer extends EntityRenderer<StrongTntEntity, TntRenderState> {
     private final BlockRenderDispatcher blockRenderer;
 
     public StrongTntRenderer(EntityRendererProvider.Context context) {
@@ -22,32 +22,43 @@ public class StrongTntRenderer extends EntityRenderer<StrongTntEntity> {
         this.blockRenderer = context.getBlockRenderDispatcher();
     }
 
-    public void render(StrongTntEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    @Override
+    public void render(TntRenderState renderState, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
         poseStack.translate(0, 0.5f, 0);
 
-        int i = entity.getFuse();
+        float f = renderState.fuseRemainingInTicks;
 
-        if (i - partialTicks + 1 < 10) {
-            float f = 1 - (i - partialTicks + 1) / 10;
-            f = Mth.clamp(f, 0, 1);
-            f *= f;
-            f *= f;
-            float g = 1 + f * 0.3f;
-            poseStack.scale(g, g, g);
+        if (renderState.fuseRemainingInTicks < 10) {
+            float g = 1 - renderState.fuseRemainingInTicks / 10;
+            g = Mth.clamp(g, 0, 1);
+            g *= g;
+            g *= g;
+            float h = 1 + g * 0.3f;
+            poseStack.scale(h, h, h);
         }
 
         poseStack.mulPose(Axis.YP.rotationDegrees(-90));
         poseStack.translate(-0.5f, -0.5f, 0.5f);
         poseStack.mulPose(Axis.YP.rotationDegrees(90));
-        TntMinecartRenderer.renderWhiteSolidBlock(this.blockRenderer, entity.getBlockState(), poseStack, buffer, packedLight, i / 5 % 2 == 0);
+
+        if (renderState.blockState != null) {
+            TntMinecartRenderer.renderWhiteSolidBlock(this.blockRenderer, renderState.blockState, poseStack, buffer, packedLight, (int)f / 5 % 2 == 0);
+        }
+
         poseStack.popPose();
-        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+        super.render(renderState, poseStack, buffer, packedLight);
     }
 
     @NotNull
     @Override
-    public ResourceLocation getTextureLocation(StrongTntEntity entity) {
-        return TextureAtlas.LOCATION_BLOCKS;
+    public TntRenderState createRenderState() {
+        return new TntRenderState();
+    }
+
+    public void extractRenderState(StrongTntEntity entity, TntRenderState renderState, float partialTick) {
+        super.extractRenderState(entity, renderState, partialTick);
+        renderState.fuseRemainingInTicks = (float) entity.getFuse() - partialTick + 1;
+        renderState.blockState = entity.getBlockState();
     }
 }

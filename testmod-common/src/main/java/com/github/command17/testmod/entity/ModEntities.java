@@ -17,7 +17,7 @@ public final class ModEntities {
                     .eyeHeight(0.15f)
                     .clientTrackingRange(10)
                     .updateInterval(10)
-                    .build(TestMod.resource("strong_tnt").toString()));
+                    .build(REGISTRY.makeKey("strong_tnt")));
 
     public static void register() {
         REGISTRY.register();

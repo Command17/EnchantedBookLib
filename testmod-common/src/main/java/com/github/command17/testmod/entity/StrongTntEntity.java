@@ -8,8 +8,9 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.ExplosionDamageCalculator;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.portal.DimensionTransition;
+import net.minecraft.world.level.portal.TeleportTransition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,6 +74,11 @@ public class StrongTntEntity extends Entity implements TraceableEntity {
     @Override
     protected Entity.MovementEmission getMovementEmission() {
         return MovementEmission.NONE;
+    }
+
+    @Override
+    public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
+        return false;
     }
 
     @Override
@@ -169,8 +175,9 @@ public class StrongTntEntity extends Entity implements TraceableEntity {
     }
 
     @Nullable
-    public Entity changeDimension(DimensionTransition transition) {
-        Entity entity = super.changeDimension(transition);
+    @Override
+    public Entity teleport(TeleportTransition transition) {
+        Entity entity = super.teleport(transition);
 
         if (entity instanceof StrongTntEntity tntEntity) {
             tntEntity.setUsedPortal(true);

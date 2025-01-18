@@ -17,7 +17,7 @@ public final class RightClickItemEventImpl {
         EventManager.invoke(rightClickItemEvent);
 
         if (rightClickItemEvent.isCanceled()) {
-            event.setCancellationResult(rightClickItemEvent.getResult().getResult());
+            event.setCancellationResult(rightClickItemEvent.getResult());
             event.setCanceled(true);
         }
     }
