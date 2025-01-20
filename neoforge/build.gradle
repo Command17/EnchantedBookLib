@@ -104,11 +104,6 @@ publishMods {
         accessToken = providers.environmentVariable("MODRINTH_TOKEN")
         projectId = "36JtkTh1"
         minecraftVersions.add(minecraft_version)
-
-        // Fabric API
-        requires {
-            id = "P7dR8mSH"
-        }
     }
 
     curseforge {
