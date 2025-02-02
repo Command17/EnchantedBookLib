@@ -4,8 +4,6 @@ plugins {
     id 'me.modmuss50.mod-publish-plugin'
 }
 
-archivesBaseName = archives_name
-
 version = "${mod_version}+mc${minecraft_version}-neoforge"
 
 architectury {
@@ -124,7 +122,7 @@ publishMods {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = archivesBaseName
+            artifactId = archives_name
             from components.java
         }
     }

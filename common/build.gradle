@@ -6,8 +6,6 @@ architectury {
     common rootProject.enabled_platforms.split(',')
 }
 
-archivesBaseName = archives_name
-
 version = "${mod_version}+mc${minecraft_version}-common"
 
 loom {
@@ -172,7 +170,7 @@ static ClassNode loadClass(Path path) {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = archivesBaseName
+            artifactId = archives_name
             from components.java
         }
     }
