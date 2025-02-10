@@ -39,7 +39,7 @@ public class ConfigData {
         this.name = definition.name();
     }
 
-    protected void setId(ResourceLocation id) {
+    void setId(ResourceLocation id) {
         if (this.id != null) {
             throw new IllegalStateException("Cannot change id of config '" + this.name + "'!");
         }
